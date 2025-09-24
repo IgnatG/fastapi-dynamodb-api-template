@@ -56,8 +56,8 @@ async def _create_tables_if_needed():
                 await _insert_sample_data()
     except Exception as e:
         # In development, table creation errors are not critical
-        print(f"⚠️  Warning: Could not create DynamoDB tables: {e}")
-        print("   This is normal if DynamoDB Local is still starting up.")
+        print(f"Warning: Could not create DynamoDB tables: {e}")
+        print("This is normal if DynamoDB Local is still starting up.")
 
 
 async def _insert_sample_data():

@@ -5,10 +5,11 @@ from fastapi import FastAPI
 from fastapi.responses import UJSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
-from app.settings import settings
 
+from app.settings import settings
 from app.api.router import api_router
 from app.lifespan import lifespan_setup
+from app.middleware import SecurityHeadersMiddleware
 
 APP_ROOT = Path(__file__).parent
 
@@ -29,6 +30,29 @@ def get_app() -> FastAPI:
         redoc_url=None,
         openapi_url="/api/openapi.json",
         default_response_class=UJSONResponse,
+    )
+
+    # Add security headers middleware to enhance security
+    app.add_middleware(
+        SecurityHeadersMiddleware,
+        # Customize security headers as needed
+        hsts_max_age=31536000,  # 1 year
+        hsts_include_subdomains=True,
+        x_frame_options="DENY",  # Prevent embedding in frames
+        referrer_policy="strict-origin-when-cross-origin",
+        # Custom CSP for API with Swagger UI support
+        csp_policy=(
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline'; "  # Swagger UI needs unsafe-inline
+            "style-src 'self' 'unsafe-inline'; "  # Swagger UI needs unsafe-inline
+            "img-src 'self' data:; "
+            "font-src 'self'; "
+            "connect-src 'self'; "
+            "frame-ancestors 'none'; "
+            "form-action 'self'; "
+            "base-uri 'self'; "
+            "object-src 'none'"
+        ),
     )
 
     # Set all CORS enabled origins

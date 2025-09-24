@@ -1,4 +1,4 @@
-"""Notes API views for DynamoDB demonstration."""
+"""Notes API routes for DynamoDB demonstration."""
 
 from typing import List
 
