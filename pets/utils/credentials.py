@@ -92,8 +92,8 @@ class DynamoDBCredentials:
             return secrets_manager.get_dynamodb_credentials(
                 self.settings.dynamodb_secret_name
             )
-        except Exception as e:
-            logger.info(f"Secrets Manager not available: {e}")
+        except Exception:
+            logger.info("Secrets Manager not available")
             return {}
 
     def _get_env_credentials(self) -> Dict[str, str]:

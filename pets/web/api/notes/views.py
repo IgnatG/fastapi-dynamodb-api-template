@@ -133,6 +133,6 @@ async def health_check() -> JSONResponse:
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             content={
                 "status": "unhealthy",
-                "message": f"DynamoDB connection failed: {str(e)}",
+                "message": "DynamoDB connection failed",
             },
         )

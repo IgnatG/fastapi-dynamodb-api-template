@@ -2,8 +2,8 @@
 
 import json
 import logging
-import boto3
 from typing import Dict, Optional
+import boto3
 from botocore.exceptions import ClientError
 
 logger = logging.getLogger(__name__)
@@ -29,7 +29,7 @@ class SecretsManager:
                     "secretsmanager", region_name=self.region_name
                 )
             except Exception as e:
-                logger.warning(f"Failed to create Secrets Manager client: {e}")
+                logger.warning("Failed to create Secrets Manager client")
                 return None
         return self._client
 
@@ -51,37 +51,33 @@ class SecretsManager:
             # Parse the secret value (assuming JSON format)
             if "SecretString" in response:
                 return json.loads(response["SecretString"])
-            else:
-                logger.warning(f"Secret {secret_name} is binary, expected JSON string")
-                return None
+
+            logger.warning("Secret is binary, expected JSON string")
+            return None
 
         except ClientError as e:
             error_code = e.response["Error"]["Code"]
             if error_code == "DecryptionFailureException":
-                logger.error(f"Secrets Manager can't decrypt the secret {secret_name}")
+                logger.error("Secrets Manager can't decrypt the secret")
             elif error_code == "InternalServiceErrorException":
-                logger.error(f"Internal service error retrieving secret {secret_name}")
+                logger.error("Internal service error retrieving secret")
             elif error_code == "InvalidParameterException":
-                logger.error(f"Invalid parameter for secret {secret_name}")
+                logger.error("Invalid parameter for secret")
             elif error_code == "InvalidRequestException":
-                logger.error(f"Invalid request for secret {secret_name}")
+                logger.error("Invalid request for secret")
             elif error_code == "ResourceNotFoundException":
-                logger.info(
-                    f"Secret {secret_name} not found - this is normal for local development"
-                )
+                logger.info("Secret not found - this is normal for local development")
             else:
-                logger.error(f"Unexpected error retrieving secret {secret_name}: {e}")
+                logger.error("Unexpected error retrieving secret")
             return None
-        except json.JSONDecodeError as e:
-            logger.error(f"Failed to parse secret {secret_name} as JSON: {e}")
+        except json.JSONDecodeError:
+            logger.error("Failed to parse secret as JSON")
             return None
-        except Exception as e:
-            logger.warning(f"Unexpected error retrieving secret {secret_name}: {e}")
+        except Exception:
+            logger.warning("Unexpected error retrieving secret")
             return None
 
-    def get_dynamodb_credentials(
-        self, secret_name: str = "pets/dynamodb"
-    ) -> Dict[str, str]:
+    def get_dynamodb_credentials(self, secret_name: str) -> Dict[str, str]:
         """
         Get DynamoDB credentials from Secrets Manager.
 
@@ -92,29 +88,25 @@ class SecretsManager:
             "region": "eu-west-1"
         }
 
-        :param secret_name: Name of the secret containing DynamoDB credentials
+        :param secret_name: Name of the secret containing DynamoDB credentials (from settings)
         :return: Dictionary with credentials, using defaults if secret not found
         """
         secret = self.get_secret(secret_name)
 
         if secret:
-            logger.info(
-                f"Successfully retrieved DynamoDB credentials from secret {secret_name}"
-            )
+            logger.info("Successfully retrieved DynamoDB credentials from secret")
             return {
                 "aws_access_key_id": secret.get("aws_access_key_id", ""),
                 "aws_secret_access_key": secret.get("aws_secret_access_key", ""),
                 "region": secret.get("region", self.region_name),
             }
-        else:
-            logger.info(
-                f"Using default DynamoDB credentials (secret {secret_name} not found)"
-            )
-            return {
-                "aws_access_key_id": "fakeLocalKey",
-                "aws_secret_access_key": "fakeLocalSecret",
-                "region": self.region_name,
-            }
+
+        logger.info("Default DynamoDB credentials not found")
+        return {
+            "aws_access_key_id": "fakeLocalKey",
+            "aws_secret_access_key": "fakeLocalSecret",
+            "region": self.region_name,
+        }
 
 
 # Global instance
