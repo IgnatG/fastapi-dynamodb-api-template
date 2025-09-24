@@ -7,10 +7,10 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 from pets.settings import settings
 
-from pets.web.api.router import api_router
-from pets.web.lifespan import lifespan_setup
+from pets.api.router import api_router
+from pets.lifespan import lifespan_setup
 
-APP_ROOT = Path(__file__).parent.parent
+APP_ROOT = Path(__file__).parent
 
 
 def get_app() -> FastAPI:

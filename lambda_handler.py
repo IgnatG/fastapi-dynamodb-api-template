@@ -5,7 +5,7 @@ This file is ONLY used when deploying to AWS Lambda.
 """
 
 from mangum import Mangum
-from pets.web.application import get_app
+from pets.application import get_app
 
 app = get_app()
 

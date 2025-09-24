@@ -17,25 +17,32 @@ This is a FastAPI web application template that provides a solid foundation for 
 
 ```
 pets/
+```
+
+pets/
 ├── pets/                    # Main application package
+│   ├── api/                 # API routes and handlers
+│   │   ├── docs/           # Documentation endpoints
+│   │   ├── monitoring/     # Health check and monitoring
+│   │   ├── notes/          # Notes CRUD endpoints
+│   │   ├── test/           # Test endpoint for demonstration
+│   │   └── router.py       # Main API router
 │   ├── db/                  # Database configurations and models
 │   │   ├── dao/            # Data Access Objects
 │   │   └── models/         # Database models
-│   ├── services/           # External services integration
+│   ├── utils/              # Utility functions
+│   │   ├── credentials.py  # Credential management
+│   │   └── secrets.py      # AWS Secrets Manager integration
+│   ├── application.py      # FastAPI app configuration
+│   ├── lifespan.py         # App lifecycle management
 │   ├── settings.py         # Application configuration
-│   ├── web/                # Web layer
-│   │   ├── api/            # API routes and handlers
-│   │   │   ├── docs/       # Documentation endpoints
-│   │   │   ├── monitoring/ # Health check and monitoring
-│   │   │   └── test/       # Test endpoint for demonstration
-│   │   ├── application.py  # FastAPI app configuration
-│   │   └── lifespan.py     # App lifecycle management
-│   └── __main__.py         # Application entry point
+│   └── **main**.py         # Application entry point
 ├── tests/                  # Test suite
 ├── docker-compose.yml      # Docker Compose configuration
 ├── Dockerfile             # Docker image definition
 ├── pyproject.toml         # Project dependencies and metadata
 └── README.md              # This file
+
 ```
 
 ## 🛠️ Prerequisites

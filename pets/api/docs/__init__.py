@@ -1,5 +1,5 @@
 """Routes for swagger and redoc."""
 
-from pets.web.api.docs.views import router
+from pets.api.docs.views import router
 
 __all__ = ["router"]

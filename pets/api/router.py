@@ -1,6 +1,6 @@
 from fastapi.routing import APIRouter
 
-from pets.web.api import docs, test, monitoring, notes
+from pets.api import docs, test, monitoring, notes
 
 api_router = APIRouter()
 api_router.include_router(monitoring.router)

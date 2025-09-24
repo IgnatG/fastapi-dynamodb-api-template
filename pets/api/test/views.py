@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from pets.web.api.test.schema import TestMessage
+from pets.api.test.schema import TestMessage
 
 router = APIRouter()
 

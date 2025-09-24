@@ -1,5 +1,5 @@
 """Notes API package."""
 
-from pets.web.api.notes.router import router
+from pets.api.notes.router import router
 
 __all__ = ["router"]
