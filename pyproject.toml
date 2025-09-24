@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "PETS"
+name = "APP"
 version = "0.1.0"
 description = ""
 authors = [
@@ -39,8 +39,8 @@ filterwarnings = [
     "ignore:.*unclosed.*:ResourceWarning",
 ]
 env = [
-    "PETS_ENVIRONMENT=pytest",
-    "PETS_DB_BASE=admin",
+    "APP_ENVIRONMENT=pytest",
+    "APP_DB_BASE=admin",
 ]
 
 [build-system]

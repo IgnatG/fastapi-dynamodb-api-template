@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    image: pets:latest
+    image: app:latest
     restart: always
     ports:
       - "8000:8000"
@@ -12,11 +12,11 @@ services:
     depends_on:
       - db
     environment:
-      PETS_HOST: 0.0.0.0
-      PETS_DYNAMODB_ENDPOINT_URL: http://pets-dynamodb:8000
+      APP_HOST: 0.0.0.0
+      APP_DYNAMODB_ENDPOINT_URL: http://app-dynamodb:8000
   db:
     image: amazon/dynamodb-local:latest
-    hostname: pets-dynamodb
+    hostname: app-dynamodb
     restart: always
     ports:
       - "8001:8000"  # DynamoDB Local runs on port 8000 internally

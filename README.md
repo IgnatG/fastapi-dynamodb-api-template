@@ -1,4 +1,4 @@
-# PETS - FastAPI Project Template
+# APP - FastAPI Project Template
 
 A modern FastAPI application template with clean architecture, built using Poetry for dependency management.
 
@@ -16,11 +16,8 @@ This is a FastAPI web application template that provides a solid foundation for 
 ## 🏗️ Project Structure
 
 ```
-pets/
-```
-
-pets/
-├── pets/                    # Main application package
+app/
+├── app/                    # Main application package
 │   ├── api/                 # API routes and handlers
 │   │   ├── docs/           # Documentation endpoints
 │   │   ├── monitoring/     # Health check and monitoring
@@ -36,13 +33,12 @@ pets/
 │   ├── application.py      # FastAPI app configuration
 │   ├── lifespan.py         # App lifecycle management
 │   ├── settings.py         # Application configuration
-│   └── **main**.py         # Application entry point
+│   └── __main__.py         # Application entry point
 ├── tests/                  # Test suite
 ├── docker-compose.yml      # Docker Compose configuration
 ├── Dockerfile             # Docker image definition
 ├── pyproject.toml         # Project dependencies and metadata
 └── README.md              # This file
-
 ```
 
 ## 🛠️ Prerequisites
@@ -62,7 +58,7 @@ pets/
 
 ```bash
 git clone <your-repository-url>
-cd pets
+cd app
 ```
 
 ### 2. Install Dependencies
@@ -88,16 +84,16 @@ Edit the `.env` file to configure your environment:
 
 ```bash
 # Basic Application Settings
-PETS_HOST=127.0.0.1
-PETS_PORT=8000
-PETS_ENVIRONMENT=dev
+APP_HOST=127.0.0.1
+APP_PORT=8000
+APP_ENVIRONMENT=dev
 
 # DynamoDB Configuration
-PETS_DYNAMODB_ENDPOINT_URL=http://localhost:8001  # For local development
-PETS_AWS_REGION=eu-west-1
+APP_DYNAMODB_ENDPOINT_URL=http://localhost:8001  # For local development
+APP_AWS_REGION=eu-west-1
 
 # AWS Secrets Manager (Configurable)
-PETS_USE_SECRETS_MANAGER=True
+APP_USE_SECRETS_MANAGER=True
 ```
 
 **Security Note**:
@@ -116,31 +112,31 @@ This application uses **Pydantic BaseSettings** with a specific naming conventio
 
 | **Setting Field** | **Environment Variable** | **Description** |
 |-------------------|--------------------------|-----------------|
-| `host` | `PETS_HOST` | Application host address |
-| `port` | `PETS_PORT` | Application port number |
-| `environment` | `PETS_ENVIRONMENT` | Environment (dev/lambda) |
-| `log_level` | `PETS_LOG_LEVEL` | Logging level |
-| `dynamodb_endpoint_url` | `PETS_DYNAMODB_ENDPOINT_URL` | DynamoDB endpoint |
-| `aws_region` | `PETS_AWS_REGION` | AWS region |
-| `use_secrets_manager` | `PETS_USE_SECRETS_MANAGER` | Enable/disable Secrets Manager |
-| `dynamodb_secret_name` | `PETS_DYNAMODB_SECRET_NAME` | Secret name in AWS |
+| `host` | `APP_HOST` | Application host address |
+| `port` | `APP_PORT` | Application port number |
+| `environment` | `APP_ENVIRONMENT` | Environment (dev/lambda) |
+| `log_level` | `APP_LOG_LEVEL` | Logging level |
+| `dynamodb_endpoint_url` | `APP_DYNAMODB_ENDPOINT_URL` | DynamoDB endpoint |
+| `aws_region` | `APP_AWS_REGION` | AWS region |
+| `use_secrets_manager` | `APP_USE_SECRETS_MANAGER` | Enable/disable Secrets Manager |
+| `dynamodb_secret_name` | `APP_DYNAMODB_SECRET_NAME` | Secret name in AWS |
 
 #### Convention Pattern
 
 ```python
-# Pattern: PETS_<FIELD_NAME_IN_UPPERCASE>
+# Pattern: APP_<FIELD_NAME_IN_UPPERCASE>
 # Field in settings.py: snake_case
-# Environment variable: PETS_SNAKE_CASE_IN_UPPERCASE
+# Environment variable: APP_SNAKE_CASE_IN_UPPERCASE
 
 # Examples:
-dynamodb_endpoint_url  →  PETS_DYNAMODB_ENDPOINT_URL
-use_secrets_manager    →  PETS_USE_SECRETS_MANAGER
-log_level             →  PETS_LOG_LEVEL
+dynamodb_endpoint_url  →  APP_DYNAMODB_ENDPOINT_URL
+use_secrets_manager    →  APP_USE_SECRETS_MANAGER
+log_level             →  APP_LOG_LEVEL
 ```
 
 #### Configuration Priority (Highest to Lowest)
 
-1. **Environment Variables** (e.g., `PETS_HOST=0.0.0.0`)
+1. **Environment Variables** (e.g., `APP_HOST=0.0.0.0`)
 2. **`.env` file** (local development)
 3. **Default values** (defined in `settings.py`)
 
@@ -148,16 +144,16 @@ log_level             →  PETS_LOG_LEVEL
 
 ```bash
 # Local Development (.env file)
-PETS_HOST=127.0.0.1
-PETS_PORT=8000
-PETS_ENVIRONMENT=dev
-PETS_USE_SECRETS_MANAGER=false
+APP_HOST=127.0.0.1
+APP_PORT=8000
+APP_ENVIRONMENT=dev
+APP_USE_SECRETS_MANAGER=false
 
 # AWS Lambda (Environment Variables)
-PETS_ENVIRONMENT=lambda
-PETS_USE_SECRETS_MANAGER=true
-PETS_DYNAMODB_SECRET_NAME=pets/dynamodb
-PETS_AWS_REGION=us-east-1
+APP_ENVIRONMENT=lambda
+APP_USE_SECRETS_MANAGER=true
+APP_DYNAMODB_SECRET_NAME=app/dynamodb
+APP_AWS_REGION=us-east-1
 ```
 
 #### How It Works
@@ -180,8 +176,8 @@ This means the same codebase works seamlessly in:
 
 #### AWS Secrets Manager (Recommended for Production)
 
-Set `PETS_USE_SECRETS_MANAGER=true` and create a secret:
-ort PETS_AWS_SECRET_ACCESS_KEY="..."
+Set `APP_USE_SECRETS_MANAGER=true` and create a secret:
+ort APP_AWS_SECRET_ACCESS_KEY="..."
 
 ### 🎯 Credential Resolution Flow
 
@@ -189,12 +185,12 @@ The application uses this logic:
 
 **Local Development:**
 
-- Always uses fake credentials (regardless of `PETS_USE_SECRETS_MANAGER` setting)
+- Always uses fake credentials (regardless of `APP_USE_SECRETS_MANAGER` setting)
 
 **AWS Lambda:**
 
-- If `PETS_USE_SECRETS_MANAGER=True`: Secrets Manager → Error if not found
-- If `PETS_USE_SECRETS_MANAGER=False`: Environment variables
+- If `APP_USE_SECRETS_MANAGER=True`: Secrets Manager → Error if not found
+- If `APP_USE_SECRETS_MANAGER=False`: Environment variables
 
 ## 🏃‍♂️ Running the Application
 
@@ -257,10 +253,10 @@ poetry run pytest -v
 
 ```bash
 # Build the Docker image
-docker build -t pets-app .
+docker build -t app-api .
 
 # Run the container
-docker run -p 8000:8000 pets-app
+docker run -p 8000:8000 app-api
 ```
 
 ### Development with Docker Compose
@@ -292,7 +288,7 @@ The project includes a simple bridge at `lambda_handler.py`:
 ```python
 # This is the ONLY Lambda-specific file you need
 from mangum import Mangum
-from pets.web.application import get_app
+from app.application import get_app
 
 app = get_app()  # Your normal FastAPI app
 handler = Mangum(app, lifespan="off")  # Mangum bridge
@@ -309,7 +305,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 
 Resources:
-  PetsApi:
+  AppApi:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: .
@@ -317,7 +313,7 @@ Resources:
       Runtime: python3.9
       Environment:
         Variables:
-          PETS_ENVIRONMENT: lambda
+          APP_ENVIRONMENT: lambda
       Events:
         ApiGateway:
           Type: Api
@@ -339,13 +335,13 @@ sam deploy --guided
 Create a `serverless.yml` file:
 
 ```yaml
-service: pets-api
+service: app-api
 
 provider:
   name: aws
   runtime: python3.9
   environment:
-    PETS_ENVIRONMENT: lambda
+    APP_ENVIRONMENT: lambda
 
 functions:
   app:
@@ -370,13 +366,13 @@ poetry export -f requirements.txt --output requirements.txt
 pip install -r requirements.txt -t ./package
 
 # Package the application
-cp -r pets ./package/
-cd package && zip -r ../pets-lambda.zip . && cd ..
+cp -r app ./package/
+cd package && zip -r ../app-lambda.zip . && cd ..
 
 # Upload to Lambda via AWS CLI or Console
 aws lambda update-function-code \
-  --function-name pets-api \
-  --zip-file fileb://pets-lambda.zip
+  --function-name app-api \
+  --zip-file fileb://app-lambda.zip
 ```
 
 ### Lambda Environment Variables
@@ -384,19 +380,19 @@ aws lambda update-function-code \
 Set these environment variables in your Lambda function:
 
 ```bash
-PETS_ENVIRONMENT=lambda
-PETS_LOG_LEVEL=INFO
+APP_ENVIRONMENT=lambda
+APP_LOG_LEVEL=INFO
 # Add database and other configuration as needed
 ```
 
 ## ⚙️ Configuration
 
-The application can be configured using environment variables. All variables should be prefixed with `PETS_`:
+The application can be configured using environment variables. All variables should be prefixed with `APP_`:
 
-- `PETS_HOST`: Server host (default: 127.0.0.1)
-- `PETS_PORT`: Server port (default: 8000)
-- `PETS_ENVIRONMENT`: Environment mode (dev/prod)
-- `PETS_LOG_LEVEL`: Logging level (DEBUG/INFO/WARNING/ERROR)
+- `APP_HOST`: Server host (default: 127.0.0.1)
+- `APP_PORT`: Server port (default: 8000)
+- `APP_ENVIRONMENT`: Environment mode (dev/prod)
+- `APP_LOG_LEVEL`: Logging level (DEBUG/INFO/WARNING/ERROR)
 
 ## 🤝 Development
 
@@ -410,7 +406,7 @@ This project uses:
 
 ### Adding New Endpoints
 
-1. Create new modules in `pets/web/api/`
-2. Follow the existing pattern (schema.py, views.py, **init**.py)
-3. Register routes in `pets/web/api/router.py`
+1. Create new modules in `app/api/`
+2. Follow the existing pattern (schema.py, views.py, `__init__.py`)
+3. Register routes in `app/api/router.py`
 4. Add tests in the `tests/` directory

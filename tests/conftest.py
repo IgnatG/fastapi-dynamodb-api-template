@@ -3,7 +3,7 @@ from typing import Any, AsyncGenerator
 import pytest
 from fastapi import FastAPI
 from httpx import AsyncClient
-from pets.web.application import get_app
+from app.application import get_app
 
 
 @pytest.fixture(scope="session")

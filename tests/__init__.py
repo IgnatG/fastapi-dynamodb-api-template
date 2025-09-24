@@ -1,1 +1,1 @@
-"""Tests for PETs."""
+"""Tests for APP."""

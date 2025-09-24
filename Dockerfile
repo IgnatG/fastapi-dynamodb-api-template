@@ -18,7 +18,7 @@ RUN --mount=type=cache,target=/tmp/poetry_cache poetry install --only main
 COPY . /app/src/
 RUN --mount=type=cache,target=/tmp/poetry_cache poetry install --only main
 
-CMD ["/usr/local/bin/python", "-m", "pets"]
+CMD ["/usr/local/bin/python", "-m", "app"]
 
 FROM prod AS dev
 
